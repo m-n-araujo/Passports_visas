@@ -1,2 +1,670 @@
-# Passports_visas
-visa checking app
+!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassportPath — README & Legal Disclaimer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #060a12;
+    --surface: #0d1525;
+    --surface2: #111e35;
+    --border: rgba(201,168,76,0.18);
+    --border2: rgba(255,255,255,0.07);
+    --gold: #c9a84c;
+    --gold-dim: rgba(201,168,76,0.12);
+    --text: #e8eaf0;
+    --text-dim: #7a8499;
+    --text-muted: #3d4a63;
+    --warn: #f59e0b;
+    --warn-bg: rgba(245,158,11,0.1);
+    --danger: #ef4444;
+    --danger-bg: rgba(239,68,68,0.08);
+    --ok: #22c55e;
+    --ok-bg: rgba(34,197,94,0.08);
+    --info: #38bdf8;
+    --info-bg: rgba(56,189,248,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 40% at 15% 0%, rgba(201,168,76,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 30% at 85% 100%, rgba(56,189,248,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+  }
+
+  /* ── HEADER ── */
+  .doc-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 36px;
+    margin-bottom: 48px;
+  }
+
+  .stamp-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .stamp {
+    width: 52px; height: 52px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .stamp::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+  }
+
+  .stamp-text h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stamp-text p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .doc-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .doc-header h2 em { font-style: italic; color: var(--gold); }
+
+  .doc-header .subtitle {
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 620px;
+  }
+
+  .meta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    border: 1px solid;
+  }
+
+  .chip-gold  { color: var(--gold); border-color: rgba(201,168,76,0.3); background: var(--gold-dim); }
+  .chip-warn  { color: var(--warn); border-color: rgba(245,158,11,0.3); background: var(--warn-bg); }
+  .chip-info  { color: var(--info); border-color: rgba(56,189,248,0.3); background: var(--info-bg); }
+  .chip-ok    { color: var(--ok);   border-color: rgba(34,197,94,0.3);  background: var(--ok-bg); }
+
+  /* ── CRITICAL BANNER ── */
+  .critical-banner {
+    background: var(--danger-bg);
+    border: 1px solid rgba(239,68,68,0.35);
+    border-left: 4px solid var(--danger);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 40px;
+  }
+
+  .critical-banner .banner-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--danger);
+    margin-bottom: 10px;
+  }
+
+  .critical-banner p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .critical-banner strong { color: var(--text); font-weight: 600; }
+
+  /* ── SECTIONS ── */
+  section {
+    margin-bottom: 44px;
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  section h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+
+  section p {
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  section p:last-child { margin-bottom: 0; }
+
+  section strong { color: var(--text); font-weight: 600; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    border: 1px solid;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .callout-warn  { background: var(--warn-bg);   border-color: rgba(245,158,11,0.25); color: #c9984a; }
+  .callout-info  { background: var(--info-bg);   border-color: rgba(56,189,248,0.2);  color: #5daece; }
+  .callout-ok    { background: var(--ok-bg);     border-color: rgba(34,197,94,0.2);   color: #4aaa6e; }
+  .callout-dark  { background: var(--surface);   border-color: var(--border2);        color: var(--text-dim); }
+
+  .callout .callout-head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .callout strong { color: inherit; filter: brightness(1.3); }
+
+  /* ── ITEM LIST ── */
+  .item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 14px 0;
+  }
+
+  .item-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    color: var(--text-dim);
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+  }
+
+  .item-list li .icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+  .item-list li strong { color: var(--text); display: block; font-size: 13px; margin-bottom: 2px; }
+
+  /* ── TWO-COL ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  .col-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .col-card .col-icon { font-size: 22px; margin-bottom: 8px; }
+  .col-card h4 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .col-card p  { font-size: 13px; color: var(--text-dim); margin: 0; line-height: 1.55; }
+
+  /* ── CODE ── */
+  .code-block {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--info);
+    overflow-x: auto;
+    margin: 14px 0;
+    line-height: 1.6;
+  }
+
+  /* ── LEGAL BLOCK ── */
+  .legal-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-top: 48px;
+  }
+
+  .legal-block .legal-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border2);
+  }
+
+  .legal-block p {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 10px;
+  }
+
+  .legal-block p:last-child { margin-bottom: 0; }
+  .legal-block strong { color: var(--text-dim); }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    margin-top: 60px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .doc-footer .quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+
+  .doc-footer .version {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border2);
+    margin: 40px 0;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Header -->
+  <div class="doc-header">
+    <div class="stamp-row">
+      <div class="stamp">✈</div>
+      <div class="stamp-text">
+        <h1>PassportPath</h1>
+        <p>Global Visa Intelligence</p>
+      </div>
+    </div>
+    <h2>README &amp; <em>Legal Notice</em></h2>
+    <p class="subtitle">Project documentation, AI disclosure, data limitations, and compliance information for users and contributors.</p>
+    <div class="meta-chips">
+      <span class="chip chip-gold">✈ v1.0.0</span>
+      <span class="chip chip-warn">⚠ AI-Generated Data</span>
+      <span class="chip chip-info">📄 Informational Only</span>
+      <span class="chip chip-ok">🌐 50 Passports · 60 Destinations</span>
+    </div>
+  </div>
+
+  <!-- Critical warning -->
+  <div class="critical-banner">
+    <div class="banner-title">⚠ Critical Notice — Read Before Use</div>
+    <p>
+      <strong>This application was built with the assistance of AI and must not be used as the sole basis for any travel decision, visa application, or immigration planning.</strong>
+      Visa regulations change frequently and without notice. The data presented may be incomplete, outdated, or inaccurate.
+      Always verify requirements directly with the official embassy, consulate, or immigration authority of your destination country before booking travel or making any legal or financial commitment.
+    </p>
+  </div>
+
+  <!-- What is PassportPath -->
+  <section>
+    <div class="section-label">01 — About</div>
+    <h3>What is PassportPath?</h3>
+    <p>
+      PassportPath is a <strong>single-file, client-side web application</strong> that provides an overview of visa requirements and entry conditions for approximately 50 nationalities across 60 destination countries. It is designed as an educational and orientation tool — a starting point for travel research, not a definitive legal resource.
+    </p>
+    <p>
+      The application runs entirely in the browser with no backend, no API calls, and no live data feed. All data is <strong>hardcoded at the time of build</strong> and reflects conditions as understood during development (2024–2025).
+    </p>
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-icon">🗂️</div>
+        <h4>Single HTML File</h4>
+        <p>Zero dependencies. No build step required. Deploy to GitHub Pages, Netlify, or any static host by uploading one file.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-icon">🤖</div>
+        <h4>AI-Assisted Build</h4>
+        <p>The data, code, and UI were generated with AI assistance (Claude by Anthropic). Human review was applied but errors may exist.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-icon">📚</div>
+        <h4>Informational Only</h4>
+        <p>This is not legal advice. It is not immigration advice. It is a general orientation guide and nothing more.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-icon">🔗</div>
+        <h4>Links to Official Sources</h4>
+        <p>Every destination links to the official immigration or visa portal of that country so users can verify information independently.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Disclosure -->
+  <section>
+    <div class="section-label">02 — AI Disclosure</div>
+    <h3>This Application Was Built With AI</h3>
+    <p>
+      In the interest of full transparency, <strong>this project was created with substantial assistance from Claude, a large language model (LLM) developed by Anthropic</strong>. The AI contributed to:
+    </p>
+    <ul class="item-list">
+      <li>
+        <span class="icon">🤖</span>
+        <div><strong>Visa Data Compilation</strong>The AI researched and structured visa requirement data for 50 passport types and 60 destination countries based on its training data. This data reflects patterns and policies known up to the model's knowledge cutoff and may not reflect recent changes.</div>
+      </li>
+      <li>
+        <span class="icon">💻</span>
+        <div><strong>Code Generation</strong>All HTML, CSS, and JavaScript code was generated by the AI and reviewed by the project owner. Bugs or logic errors may be present.</div>
+      </li>
+      <li>
+        <span class="icon">🎨</span>
+        <div><strong>UI/UX Design</strong>The visual design, layout, colour palette, and interaction patterns were specified and implemented by the AI.</div>
+      </li>
+    </ul>
+    <div class="callout callout-warn">
+      <div class="callout-head">⚠ AI Limitations</div>
+      Large language models can and do make mistakes. They may <strong>confabulate (hallucinate) facts</strong>, present outdated data as current, or generalise incorrectly from related policies. The visa data in this application has not been independently verified by a licensed immigration lawyer or government authority. <strong>Use this tool at your own risk.</strong>
+    </div>
+  </section>
+
+  <!-- Data Accuracy -->
+  <section>
+    <div class="section-label">03 — Data Accuracy &amp; Limitations</div>
+    <h3>Known Limitations of the Data</h3>
+    <p>Visa and entry requirements are among the most frequently changing categories of international law. The following limitations apply to all data in this application:</p>
+    <ul class="item-list">
+      <li>
+        <span class="icon">📅</span>
+        <div><strong>Static, Time-Stamped Data</strong>The data is hardcoded and was accurate (to the best of the author's knowledge) around 2024–2025. It is not updated automatically or in real time.</div>
+      </li>
+      <li>
+        <span class="icon">🔁</span>
+        <div><strong>Reciprocity &amp; Bilateral Changes</strong>Countries can and do revise visa-free agreements, introduce new electronic authorisation requirements (such as ETAs or eTAs), or suspend access with little notice — often in response to diplomatic events.</div>
+      </li>
+      <li>
+        <span class="icon">🆔</span>
+        <div><strong>Passport Variant Differences</strong>Some countries issue passports with different privileges (e.g. diplomatic vs. ordinary). Dual nationals may face additional rules. This application does not account for these distinctions.</div>
+      </li>
+      <li>
+        <span class="icon">🚧</span>
+        <div><strong>Entry Conditions Beyond Visas</strong>Even where visa-free access applies, countries may require proof of onward travel, sufficient funds, vaccinations, travel insurance, valid return tickets, or may deny entry at the border officer's discretion.</div>
+      </li>
+      <li>
+        <span class="icon">🌐</span>
+        <div><strong>Territorial Disputes &amp; Special Regions</strong>Some territories (e.g. Taiwan, Kosovo, Palestine) have complex status. This application uses simplified country codes and may not reflect the full legal or political complexity.</div>
+      </li>
+      <li>
+        <span class="icon">✈</span>
+        <div><strong>Transit vs. Entry</strong>Transit visa requirements (when transiting through a country's airport without clearing immigration) are not covered and are handled differently from entry visas.</div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- No Reliance -->
+  <section>
+    <div class="section-label">04 — No Reliance</div>
+    <h3>Do Not Make Decisions Based on This App Alone</h3>
+    <div class="callout callout-warn">
+      <div class="callout-head">🚫 This is not legal advice</div>
+      <strong>PassportPath does not constitute legal advice, immigration advice, or travel advice.</strong> No lawyer-client relationship is formed through use of this application. The author(s) are not licensed immigration lawyers, travel agents, or government officials.
+    </div>
+    <p>Before travelling internationally, you should always:</p>
+    <ul class="item-list">
+      <li><span class="icon">🏛️</span><div><strong>Contact the official embassy or consulate</strong> of your destination country in your home country for authoritative requirements.</div></li>
+      <li><span class="icon">🌐</span><div><strong>Visit the official government website</strong> of your destination country's immigration or border authority.</div></li>
+      <li><span class="icon">⚖️</span><div><strong>Consult a licensed immigration attorney</strong> if your situation is complex, if you have prior immigration violations, or if you hold multiple nationalities.</div></li>
+      <li><span class="icon">🧳</span><div><strong>Check your government's official travel advisories</strong> (e.g. travel.state.gov for US citizens, gov.uk/foreign-travel-advice for UK citizens) for safety and entry information.</div></li>
+    </ul>
+  </section>
+
+  <!-- Official Sources -->
+  <section>
+    <div class="section-label">05 — Official Sources</div>
+    <h3>Where to Verify Visa Information</h3>
+    <p>The following are authoritative, official sources. Always cross-reference PassportPath data with at least one of these before travelling.</p>
+    <div class="two-col">
+      <div class="col-card">
+        <div class="col-icon">🇺🇸</div>
+        <h4>US Citizens</h4>
+        <p><a href="https://travel.state.gov" target="_blank" rel="noopener">travel.state.gov</a> — US Department of State travel and visa information.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-icon">🇬🇧</div>
+        <h4>UK Citizens</h4>
+        <p><a href="https://www.gov.uk/foreign-travel-advice" target="_blank" rel="noopener">gov.uk/foreign-travel-advice</a> — FCDO travel advisories and visa guidance.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-icon">🇪🇺</div>
+        <h4>EU Citizens</h4>
+        <p><a href="https://europa.eu/youreurope/citizens/travel/" target="_blank" rel="noopener">europa.eu/youreurope</a> — European Commission travel and entry rules.</p>
+      </div>
+      <div class="col-card">
+        <div class="col-icon">🌍</div>
+        <h4>Global Reference</h4>
+        <p><a href="https://www.iatatravelcentre.com" target="_blank" rel="noopener">iatatravelcentre.com</a> — IATA Timatic: the industry standard used by airlines.</p>
+      </div>
+    </div>
+    <div class="callout callout-info">
+      <div class="callout-head">ℹ Pro Tip</div>
+      <strong>IATA Timatic</strong> (used by airlines to verify passenger eligibility) is one of the most reliable tools for current visa requirements. It is accessible via the <a href="https://www.iatatravelcentre.com/passport-visa-health-travel-information-portal.htm" target="_blank" rel="noopener">IATA Travel Centre portal</a>.
+    </div>
+  </section>
+
+  <!-- How to Deploy -->
+  <section>
+    <div class="section-label">06 — Deployment</div>
+    <h3>How to Deploy</h3>
+    <p>PassportPath is a fully self-contained single HTML file. No build tools, frameworks, or servers are required.</p>
+    <div class="callout callout-ok">
+      <div class="callout-head">✓ GitHub Pages (Recommended)</div>
+      <strong>1.</strong> Fork or clone this repository.<br>
+      <strong>2.</strong> Go to <em>Settings → Pages</em> in your GitHub repository.<br>
+      <strong>3.</strong> Set the source branch to <code>main</code> and the folder to <code>/ (root)</code>.<br>
+      <strong>4.</strong> GitHub will publish the app at <code>https://[your-username].github.io/[repo-name]/passportpath.html</code>
+    </div>
+    <div class="code-block">
+# Clone the repo
+git clone https://github.com/[your-username]/passportpath.git
+cd passportpath
+
+# No build step needed — open directly in browser
+open passportpath.html
+
+# Or serve locally with any static server
+npx serve .
+python3 -m http.server 8080
+    </div>
+    <div class="callout callout-dark">
+      <div class="callout-head">📦 File Structure</div>
+      <code>passportpath.html</code> — The entire application (HTML + CSS + JS + data)<br>
+      <code>README.html</code> — This documentation file
+    </div>
+  </section>
+
+  <!-- Contributing -->
+  <section>
+    <div class="section-label">07 — Contributing</div>
+    <h3>Reporting Errors &amp; Contributing</h3>
+    <p>
+      Because visa data changes frequently and AI-generated content may contain errors, <strong>error reports are welcome and encouraged</strong>. If you identify incorrect data, please flag it via GitHub Issues — do not modify or redistribute the source code, as this application is proprietary.
+    </p>
+    <ul class="item-list">
+      <li><span class="icon">🐛</span><div><strong>Open a GitHub Issue</strong> describing the incorrect entry, your passport, the destination, and a link to the official source that contradicts the data shown. The author(s) will apply corrections in a future update.</div></li>
+      <li><span class="icon">🌐</span><div><strong>Link official sources only</strong> — only government websites, official embassy pages, or authoritative bodies such as IATA are accepted as references. Third-party travel blogs or forums will not be accepted.</div></li>
+      <li><span class="icon">⚠</span><div><strong>Do not fork or copy the codebase</strong> to apply corrections independently. Submitting corrections via Issues does not grant any rights over the source code. See the License section for permitted use.</div></li>
+    </ul>
+  </section>
+
+  <!-- License -->
+  <section>
+    <div class="section-label">08 — License &amp; Permitted Use</div>
+    <h3>License &amp; Permitted Use</h3>
+    <p>
+      PassportPath is <strong>proprietary software</strong>. It is made freely available for personal, non-commercial use only. All other rights are reserved by the author(s).
+    </p>
+    <div class="callout callout-ok">
+      <div class="callout-head">✓ What You May Do</div>
+      <strong>Use it free of charge</strong> — You may access and use PassportPath for personal travel research at no cost, without registration or payment.<br><br>
+      <strong>Share a link</strong> — You may share the URL of the hosted application with others.
+    </div>
+    <div class="callout callout-warn">
+      <div class="callout-head">✗ What You May Not Do</div>
+      The following are strictly prohibited without prior written permission from the author(s):<br><br>
+      <strong>· Copy or reproduce</strong> — You may not copy, download, or reproduce the source code or any substantial part of this application.<br><br>
+      <strong>· Distribute or redistribute</strong> — You may not distribute, publish, or make available this application or any derivative of it through any channel, platform, or medium.<br><br>
+      <strong>· Modify or create derivatives</strong> — You may not modify, adapt, translate, reverse-engineer, decompile, or create derivative works based on this application.<br><br>
+      <strong>· Commercial use</strong> — You may not use this application, its code, data, or design for any commercial purpose, including but not limited to selling access, embedding it in a paid product, or using it to generate revenue.<br><br>
+      <strong>· Sublicense or transfer</strong> — You may not sublicense, sell, rent, lease, or transfer any rights in this application to any third party.
+    </div>
+    <div class="callout callout-dark">
+      <div class="callout-head">📬 Permissions &amp; Enquiries</div>
+      If you wish to use PassportPath beyond the scope of personal use — including embedding it in another product, redistributing it, or licensing it commercially — please contact the author(s) directly via the GitHub repository to request written permission.
+    </div>
+    <p style="font-size:13px; color: var(--text-muted); margin-top: 12px;">
+      Copyright © 2025 PassportPath Author(s). All rights reserved. Unauthorised use, reproduction, or distribution of this application, in whole or in part, may result in civil and criminal penalties and will be prosecuted to the maximum extent permitted by law.
+    </p>
+  </section>
+
+  <!-- Full Legal Disclaimer -->
+  <div class="legal-block">
+    <div class="legal-title">⚖ Full Legal Disclaimer</div>
+    <p>
+      <strong>INFORMATIONAL PURPOSE ONLY.</strong> PassportPath and all content within it is provided for general informational and educational purposes only. It does not constitute legal advice, immigration advice, travel advice, or any other form of professional advice.
+    </p>
+    <p>
+      <strong>NO WARRANTY.</strong> The author(s) make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability of the information contained in this application. Any reliance you place on such information is therefore strictly at your own risk.
+    </p>
+    <p>
+      <strong>AI-GENERATED CONTENT.</strong> The visa data and application code were generated in whole or in part using artificial intelligence (Claude by Anthropic). AI-generated content may contain errors, omissions, confabulations, or outdated information. This content has not been verified by licensed immigration professionals or government authorities.
+    </p>
+    <p>
+      <strong>NO LIABILITY.</strong> To the fullest extent permitted by applicable law, the author(s) shall not be liable for any loss or damage — including, without limitation, financial loss, denied boarding, deportation, detention, fines, missed travel, or any consequential loss — arising directly or indirectly from your use of or reliance on the information provided in this application.
+    </p>
+    <p>
+      <strong>THIRD-PARTY LINKS.</strong> This application contains links to official government websites and immigration portals. These are provided for convenience only. The author(s) have no control over the content of those sites and accept no responsibility for them or for any loss or damage that may arise from your use of them.
+    </p>
+    <p>
+      <strong>CHANGES TO VISA POLICIES.</strong> Visa policies, entry requirements, and travel restrictions are subject to change at any time without notice by sovereign governments. The author(s) accept no responsibility for failure to update the information in this application.
+    </p>
+    <p>
+      <strong>ALWAYS VERIFY INDEPENDENTLY.</strong> You must verify all visa and entry requirements independently with the official embassy, consulate, or immigration authority of your destination country before booking travel or making any legal or financial commitment related to international travel.
+    </p>
+    <p>
+      By using PassportPath, you acknowledge that you have read this disclaimer, that you understand it, and that you agree to be bound by it. If you do not agree, please do not use this application.
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div class="doc-footer">
+    <div class="quote">"Know the rules well enough to break them wisely."</div>
+    <div class="version">
+      PassportPath · README v1.0<br>
+      Built with AI (Claude by Anthropic)<br>
+      Data reference year: 2024–2025
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
