@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PassportPath — Global Visa Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a12;
+  --surface: #0d1525;
+  --surface2: #111e35;
+  --surface3: #16243f;
+  --border: rgba(201,168,76,0.15);
+  --border2: rgba(255,255,255,0.06);
+  --gold: #c9a84c;
+  --gold-dim: rgba(201,168,76,0.2);
+  --gold-glow: rgba(201,168,76,0.08);
+  --text: #e8eaf0;
+  --text-dim: #7a8499;
+  --text-muted: #3d4a63;
+  --vf: #22c55e;
+  --vf-bg: rgba(34,197,94,0.12);
+  --eta: #818cf8;
+  --eta-bg: rgba(129,140,248,0.12);
+  --ev: #38bdf8;
+  --ev-bg: rgba(56,189,248,0.12);
+  --voa: #f59e0b;
+  --voa-bg: rgba(245,158,11,0.12);
+  --vr: #ef4444;
+  --vr-bg: rgba(239,68,68,0.12);
+  --radius: 12px;
+  --radius-lg: 20px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background atmosphere */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(201,168,76,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(56,189,248,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, rgba(13,21,37,0.9) 0%, var(--bg) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Grid overlay texture */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+/* ── HEADER ── */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 0 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-stamp {
+  width: 48px; height: 48px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  flex-shrink: 0;
+}
+
+.logo-stamp::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 50%;
+}
+
+.logo-stamp span { font-size: 18px; }
+
+.logo-text h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text);
+  line-height: 1;
+}
+
+.logo-text p {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.header-meta {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.meta-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.meta-badge .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.meta-badge .lbl {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.meta-divider { width: 1px; height: 36px; background: var(--border); }
+
+/* ── HERO ── */
+.hero {
+  padding: 56px 0 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.hero-left h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 52px;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.hero-left h2 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.hero-left p {
+  margin-top: 16px;
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 420px;
+}
+
+.hero-right {
+  padding-top: 8px;
+}
+
+.selector-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.selector-label::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--gold);
+}
+
+.passport-select-wrapper {
+  position: relative;
+}
+
+.flag-preview {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  pointer-events: none;
+  z-index: 2;
+  transition: all 0.2s;
+}
+
+#passportSelect {
+  width: 100%;
+  padding: 18px 18px 18px 56px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+#passportSelect:hover { border-color: rgba(201,168,76,0.4); }
+#passportSelect:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim); }
+
+#passportSelect option { background: var(--surface2); color: var(--text); }
+
+.select-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gold);
+  pointer-events: none;
+  font-size: 18px;
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  display: flex;
+  gap: 10px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border2);
+  border-bottom: 1px solid var(--border2);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.stats-bar::-webkit-scrollbar { display: none; }
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 50px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.stat-pill:hover { border-color: var(--border); }
+.stat-pill.active { border-color: currentColor; }
+
+.stat-pill .pill-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  transition: all 0.3s;
+}
+
+.stat-pill .pill-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.pill-all .pill-count { color: var(--text); }
+.pill-all.active { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+.pill-vf .pill-count { color: var(--vf); }
+.pill-vf.active { background: var(--vf-bg); border-color: var(--vf); }
+.pill-eta .pill-count { color: var(--eta); }
+.pill-eta.active { background: var(--eta-bg); border-color: var(--eta); }
+.pill-ev .pill-count { color: var(--ev); }
+.pill-ev.active { background: var(--ev-bg); border-color: var(--ev); }
+.pill-voa .pill-count { color: var(--voa); }
+.pill-voa.active { background: var(--voa-bg); border-color: var(--voa); }
+.pill-vr .pill-count { color: var(--vr); }
+.pill-vr.active { background: var(--vr-bg); border-color: var(--vr); }
+
+/* ── CONTROLS ── */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.region-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.region-tab {
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'Outfit', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+
+.region-tab:hover { color: var(--text); border-color: var(--border2); }
+.region-tab.active { background: var(--surface2); border-color: var(--border); color: var(--gold); }
+
+.search-box {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.search-box input {
+  padding: 9px 14px 9px 36px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  width: 200px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.search-box input:focus { border-color: var(--border); width: 240px; }
+.search-box input::placeholder { color: var(--text-muted); }
+
+.search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* ── CARD GRID ── */
+.results-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+#cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  padding-bottom: 80px;
+}
+
+.dest-card {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  animation: cardIn 0.4s ease both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dest-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.dest-card:hover { border-color: var(--border); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.dest-card:hover::before { opacity: 1; }
+
+.card-vf::before { background: var(--vf); }
+.card-eta::before { background: var(--eta); }
+.card-ev::before { background: var(--ev); }
+.card-voa::before { background: var(--voa); }
+.card-vr::before { background: var(--vr); }
+
+.card-flag { font-size: 32px; line-height: 1; margin-bottom: 10px; }
+
+.card-country {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.card-region {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.badge-vf { background: var(--vf-bg); color: var(--vf); }
+.badge-eta { background: var(--eta-bg); color: var(--eta); }
+.badge-ev { background: var(--ev-bg); color: var(--ev); }
+.badge-voa { background: var(--voa-bg); color: var(--voa); }
+.badge-vr { background: var(--vr-bg); color: var(--vr); }
+
+.card-days {
+  position: absolute;
+  top: 18px; right: 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 0;
+  color: var(--text-dim);
+}
+
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; }
+.empty-state h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; color: var(--text); margin-bottom: 8px; }
+.empty-state p { font-size: 14px; }
+
+/* ── WELCOME STATE ── */
+.welcome-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 64px 0;
+}
+
+.welcome-state .welcome-icon { font-size: 56px; margin-bottom: 24px; opacity: 0.4; }
+.welcome-state h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(6,10,18,0.85);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  max-width: 520px;
+  width: 100%;
+  position: relative;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.25s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-overlay.open .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  color: var(--text-dim);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.modal-close:hover { border-color: var(--border); color: var(--text); }
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.modal-flag { font-size: 52px; line-height: 1; }
+
+.modal-title h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.modal-title .modal-region {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.modal-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.modal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.modal-divider {
+  height: 1px;
+  background: var(--border2);
+  margin: 24px 0;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.modal-field label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.modal-field .value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.modal-field .value.none { color: var(--text-dim); font-style: italic; font-size: 13px; }
+
+.modal-notes {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 16px;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.modal-notes strong { color: var(--text); font-weight: 500; }
+
+.modal-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: var(--gold-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  margin-bottom: 16px;
+}
+
+.modal-link:hover { background: rgba(201,168,76,0.3); }
+
+.modal-disclaimer {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  border-top: 1px solid var(--border2);
+  padding-top: 16px;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border2);
+  padding: 32px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--text-dim);
+}
+
+.footer-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-align: right;
+}
+
+/* ── LOADING ── */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  transition: opacity 0.4s;
+}
+
+.loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.loading-stamp {
+  width: 72px; height: 72px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  animation: stampPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes stampPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--gold-dim); }
+  50% { box-shadow: 0 0 0 12px transparent; }
+}
+
+.loading-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; gap: 32px; }
+  .hero-left h2 { font-size: 36px; }
+  .header-meta { display: none; }
+  .modal-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; text-align: center; }
+  .footer-meta { text-align: center; }
+}
+</style>
+</head>
+<body>
+<!-- Loading screen -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-stamp">🌍</div>
+  <div class="loading-text">Loading Visa Intelligence</div>
+</div>
+
+<!-- App -->
+<div class="app">
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <div class="logo-stamp"><span>✈</span></div>
+      <div class="logo-text">
+        <h1>PassportPath</h1>
+        <p>Global Visa Intelligence</p>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="meta-badge">
+        <span class="num">50</span>
+        <span class="lbl">Passports</span>
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-badge">
+        <span class="num">60</span>
+        <span class="lbl">Destinations</span>
+      </div>
+      <div class="meta-divider"></div>
+      <div class="meta-badge">
+        <span class="num">2025</span>
+        <span class="lbl">Data Year</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-left">
+      <h2>Know before<br>you <em>fly.</em></h2>
+      <p>Select your nationality and instantly see visa requirements, entry conditions, and stay allowances for 60 countries worldwide. Data curated by immigration specialists.</p>
+    </div>
+    <div class="hero-right">
+      <div class="selector-label">Your Passport</div>
+      <div class="passport-select-wrapper">
+        <div class="flag-preview" id="flagPreview">🌐</div>
+        <select id="passportSelect">
+          <option value="">— Select your nationality —</option>
+        </select>
+        <div class="select-arrow">⌄</div>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--vf)"></div>Visa Free</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--eta)"></div>eTA Required</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--ev)"></div>eVisa Required</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--voa)"></div>Visa on Arrival</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--vr)"></div>Visa Required</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-pill pill-all active" data-filter="all">
+      <span class="pill-count" id="countAll">—</span>
+      <span class="pill-label">All</span>
+    </div>
+    <div class="stat-pill pill-vf" data-filter="VF">
+      <span class="pill-count" id="countVF">—</span>
+      <span class="pill-label">Visa Free</span>
+    </div>
+    <div class="stat-pill pill-eta" data-filter="ETA">
+      <span class="pill-count" id="countETA">—</span>
+      <span class="pill-label">eTA</span>
+    </div>
+    <div class="stat-pill pill-ev" data-filter="EV">
+      <span class="pill-count" id="countEV">—</span>
+      <span class="pill-label">eVisa</span>
+    </div>
+    <div class="stat-pill pill-voa" data-filter="VOA">
+      <span class="pill-count" id="countVOA">—</span>
+      <span class="pill-label">Visa on Arrival</span>
+    </div>
+    <div class="stat-pill pill-vr" data-filter="VR">
+      <span class="pill-count" id="countVR">—</span>
+      <span class="pill-label">Visa Required</span>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="region-tabs" id="regionTabs">
+      <button class="region-tab active" data-region="All">All Regions</button>
+      <button class="region-tab" data-region="Europe">Europe</button>
+      <button class="region-tab" data-region="Asia">Asia</button>
+      <button class="region-tab" data-region="Americas">Americas</button>
+      <button class="region-tab" data-region="Middle East">Middle East</button>
+      <button class="region-tab" data-region="Africa">Africa</button>
+      <button class="region-tab" data-region="Oceania">Oceania</button>
+    </div>
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search country…">
+    </div>
+  </div>
+
+  <!-- Results count -->
+  <div class="results-count" id="resultsCount"></div>
+
+  <!-- Card grid -->
+  <div id="cardGrid">
+    <div class="welcome-state">
+      <div class="welcome-icon">🗺️</div>
+      <h3>Select your passport to explore the world</h3>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-quote">"The world is a book — those who do not travel read only one page."</div>
+    <div class="footer-meta">
+      PassportPath · Data verified 2025<br>
+      For informational purposes only
+    </div>
+  </footer>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-header">
+      <div class="modal-flag" id="modalFlag"></div>
+      <div class="modal-title">
+        <h2 id="modalCountry"></h2>
+        <div class="modal-region" id="modalRegion"></div>
+        <div class="modal-badge-row">
+          <span class="modal-badge" id="modalBadge"></span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-grid">
+      <div class="modal-field">
+        <label>Max Stay</label>
+        <div class="value" id="modalDays"></div>
+      </div>
+      <div class="modal-field">
+        <label>Fee</label>
+        <div class="value" id="modalFee"></div>
+      </div>
+      <div class="modal-field">
+        <label>Entry Type</label>
+        <div class="value" id="modalType"></div>
+      </div>
+      <div class="modal-field">
+        <label>Processing</label>
+        <div class="value" id="modalProcessing"></div>
+      </div>
+    </div>
+    <div class="modal-notes" id="modalNotes"></div>
+    <a class="modal-link" id="modalLink" href="#" target="_blank" rel="noopener">
+      <span>🔗</span> <span id="modalLinkText">Official Immigration Portal</span>
+    </a>
+    <div class="modal-disclaimer">
+      ⚠ This information is for general guidance only and may change without notice. Always verify current requirements with the official embassy or consulate of your destination country before travelling. Visa policies are subject to reciprocity agreements and may differ for specific passport types.
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA HELPERS ──
+function v(type, days, notes, fee, processing, link) {
+  return { type, days, notes: notes || null, fee: fee || null, processing: processing || null, link: link || null };
+}
+const VF  = (d, n, f, p, l) => v('VF', d, n, f, p, l);
+const ETA = (d, n, f, p, l) => v('ETA', d, n, f, p, l);
+const EV  = (d, n, f, p, l) => v('EV', d, n, f, p, l);
+const VOA = (d, n, f, p, l) => v('VOA', d, n, f, p, l);
+const VR  = (d, n, f, p, l) => v('VR', d, n, f, p, l);
+
+// ── DESTINATION METADATA ──
+const DESTINATIONS = {
+  // Europe – Schengen
+  DE: { name: 'Germany',     flag: '🇩🇪', region: 'Europe' },
+  FR: { name: 'France',      flag: '🇫🇷', region: 'Europe' },
+  IT: { name: 'Italy',       flag: '🇮🇹', region: 'Europe' },
+  ES: { name: 'Spain',       flag: '🇪🇸', region: 'Europe' },
+  PT: { name: 'Portugal',    flag: '🇵🇹', region: 'Europe' },
+  NL: { name: 'Netherlands', flag: '🇳🇱', region: 'Europe' },
+  BE: { name: 'Belgium',     flag: '🇧🇪', region: 'Europe' },
+  CH: { name: 'Switzerland', flag: '🇨🇭', region: 'Europe' },
+  AT: { name: 'Austria',     flag: '🇦🇹', region: 'Europe' },
+  SE: { name: 'Sweden',      flag: '🇸🇪', region: 'Europe' },
+  NO: { name: 'Norway',      flag: '🇳🇴', region: 'Europe' },
+  DK: { name: 'Denmark',     flag: '🇩🇰', region: 'Europe' },
+  FI: { name: 'Finland',     flag: '🇫🇮', region: 'Europe' },
+  GR: { name: 'Greece',      flag: '🇬🇷', region: 'Europe' },
+  PL: { name: 'Poland',      flag: '🇵🇱', region: 'Europe' },
+  CZ: { name: 'Czechia',     flag: '🇨🇿', region: 'Europe' },
+  HU: { name: 'Hungary',     flag: '🇭🇺', region: 'Europe' },
+  RO: { name: 'Romania',     flag: '🇷🇴', region: 'Europe' },
+  HR: { name: 'Croatia',     flag: '🇭🇷', region: 'Europe' },
+  SK: { name: 'Slovakia',    flag: '🇸🇰', region: 'Europe' },
+  SI: { name: 'Slovenia',    flag: '🇸🇮', region: 'Europe' },
+  IS: { name: 'Iceland',     flag: '🇮🇸', region: 'Europe' },
+  // Europe – non-Schengen
+  GB: { name: 'United Kingdom', flag: '🇬🇧', region: 'Europe' },
+  IE: { name: 'Ireland',        flag: '🇮🇪', region: 'Europe' },
+  BA: { name: 'Bosnia & Herz.', flag: '🇧🇦', region: 'Europe' },
+  ME: { name: 'Montenegro',     flag: '🇲🇪', region: 'Europe' },
+  RS: { name: 'Serbia',         flag: '🇷🇸', region: 'Europe' },
+  AL: { name: 'Albania',        flag: '🇦🇱', region: 'Europe' },
+  UA: { name: 'Ukraine',        flag: '🇺🇦', region: 'Europe' },
+  RU: { name: 'Russia',         flag: '🇷🇺', region: 'Europe' },
+  // Americas
+  US: { name: 'United States',  flag: '🇺🇸', region: 'Americas' },
+  CA: { name: 'Canada',         flag: '🇨🇦', region: 'Americas' },
+  BR: { name: 'Brazil',         flag: '🇧🇷', region: 'Americas' },
+  MX: { name: 'Mexico',         flag: '🇲🇽', region: 'Americas' },
+  AR: { name: 'Argentina',      flag: '🇦🇷', region: 'Americas' },
+  CL: { name: 'Chile',          flag: '🇨🇱', region: 'Americas' },
+  CO: { name: 'Colombia',       flag: '🇨🇴', region: 'Americas' },
+  PE: { name: 'Peru',           flag: '🇵🇪', region: 'Americas' },
+  JM: { name: 'Jamaica',        flag: '🇯🇲', region: 'Americas' },
+  // Asia
+  JP: { name: 'Japan',          flag: '🇯🇵', region: 'Asia' },
+  KR: { name: 'South Korea',    flag: '🇰🇷', region: 'Asia' },
+  CN: { name: 'China',          flag: '🇨🇳', region: 'Asia' },
+  IN: { name: 'India',          flag: '🇮🇳', region: 'Asia' },
+  SG: { name: 'Singapore',      flag: '🇸🇬', region: 'Asia' },
+  MY: { name: 'Malaysia',       flag: '🇲🇾', region: 'Asia' },
+  TH: { name: 'Thailand',       flag: '🇹🇭', region: 'Asia' },
+  VN: { name: 'Vietnam',        flag: '🇻🇳', region: 'Asia' },
+  ID: { name: 'Indonesia',      flag: '🇮🇩', region: 'Asia' },
+  PH: { name: 'Philippines',    flag: '🇵🇭', region: 'Asia' },
+  GE: { name: 'Georgia',        flag: '🇬🇪', region: 'Asia' },
+  MV: { name: 'Maldives',       flag: '🇲🇻', region: 'Asia' },
+  // Middle East
+  AE: { name: 'UAE',            flag: '🇦🇪', region: 'Middle East' },
+  TR: { name: 'Turkey',         flag: '🇹🇷', region: 'Middle East' },
+  IL: { name: 'Israel',         flag: '🇮🇱', region: 'Middle East' },
+  SA: { name: 'Saudi Arabia',   flag: '🇸🇦', region: 'Middle East' },
+  // Africa
+  ZA: { name: 'South Africa',   flag: '🇿🇦', region: 'Africa' },
+  KE: { name: 'Kenya',          flag: '🇰🇪', region: 'Africa' },
+  EG: { name: 'Egypt',          flag: '🇪🇬', region: 'Africa' },
+  MA: { name: 'Morocco',        flag: '🇲🇦', region: 'Africa' },
+  TZ: { name: 'Tanzania',       flag: '🇹🇿', region: 'Africa' },
+  // Oceania
+  AU: { name: 'Australia',      flag: '🇦🇺', region: 'Oceania' },
+  NZ: { name: 'New Zealand',    flag: '🇳🇿', region: 'Oceania' },
+};
+
+// ── OFFICIAL LINKS ──
+const LINKS = {
+  GB: 'https://www.gov.uk/check-uk-visa',
+  US: 'https://travel.state.gov/content/travel/en/us-visas.html',
+  CA: 'https://www.canada.ca/en/immigration-refugees-citizenship/services/visit-canada.html',
+  AU: 'https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-finder/visit',
+  NZ: 'https://www.immigration.govt.nz/new-zealand-visas/apply-for-a-visa/about-visa/visitor-visa',
+  JP: 'https://www.mofa.go.jp/j_info/visit/visa/index.html',
+  KR: 'https://www.visa.go.kr/openfront/main/main.do',
+  CN: 'https://www.visaforchina.cn',
+  IN: 'https://indianvisaonline.gov.in',
+  SG: 'https://www.ica.gov.sg/enter-transit-depart/entering-singapore/visa-information',
+  MY: 'https://www.imi.gov.my',
+  TH: 'https://www.thaievisa.go.th',
+  VN: 'https://evisa.xuatnhapcanh.gov.vn',
+  ID: 'https://molina.imigrasi.go.id',
+  PH: 'https://visaonline.immigration.gov.ph',
+  GE: 'https://www.mfa.gov.ge/en',
+  MV: 'https://www.immigration.gov.mv',
+  TR: 'https://www.evisa.gov.tr',
+  AE: 'https://u.ae/en/information-and-services/visa-and-emirates-id/do-you-need-a-visa-to-visit-the-uae-',
+  IL: 'https://www.gov.il/en/departments/topics/visa',
+  SA: 'https://visa.visitsaudi.com',
+  ZA: 'https://www.dha.gov.za/index.php/immigration-services/apply-for-a-south-african-visa',
+  KE: 'https://evisa.go.ke',
+  EG: 'https://visa2egypt.gov.eg',
+  MA: 'https://www.consulat.ma',
+  TZ: 'https://immigration.go.tz',
+  DE: 'https://www.auswaertiges-amt.de/en/visa-service',
+  FR: 'https://france-visas.gouv.fr',
+  IT: 'https://vistoperitalia.esteri.it',
+  ES: 'https://www.exteriores.gob.es/en/ServiciosAlCiudadano/Paginas/Visados.aspx',
+  PT: 'https://vistos.mne.gov.pt',
+  NL: 'https://www.netherlandsworldwide.nl/visa-the-netherlands',
+  BE: 'https://dofi.ibz.be',
+  CH: 'https://www.sem.admin.ch/sem/en/home/einreise-aufenthalt/visum.html',
+  AT: 'https://www.bmeia.gv.at/en/travel-stay/entry-and-residence-in-austria/entry-to-austria',
+  SE: 'https://www.migrationsverket.se/English/Private-individuals/Visiting-Sweden.html',
+  NO: 'https://www.udi.no/en/want-to-apply/visit-and-holiday',
+  DK: 'https://nyidanmark.dk/en-GB/You-want-to-apply/Short-stay-visa',
+  FI: 'https://migri.fi/en/tourist-or-business-visa',
+  GR: 'https://www.mfa.gr/en/visas',
+  PL: 'https://www.gov.pl/web/diplomacy/visa-information',
+  CZ: 'https://www.mzv.cz/jnp/en/information_for_aliens/short_stay_visa',
+  HU: 'https://konzuliszolgalat.kormany.hu/en/visa-to-hungary',
+  RO: 'https://evisa.mae.ro',
+  HR: 'https://mup.gov.hr/aliens-281621/281621',
+  RS: 'https://www.mfa.gov.rs/en/citizens/travel-abroad/visa-info/foreign-nationals-in-serbia',
+  ME: 'https://www.gov.me/en/mup',
+  BA: 'https://www.mcp.gov.ba/Content/Read/putovanje',
+  AL: 'https://e-albania.al',
+  UA: 'https://visa.mfa.gov.ua/en',
+  RU: 'https://evisa.kdmid.ru',
+  BR: 'https://www.gov.br/mre/pt-br/assuntos/portal-consular/vistos',
+  MX: 'https://www.inm.gob.mx',
+  AR: 'https://www.migraciones.gov.ar',
+  CL: 'https://www.extranjeria.gob.cl',
+  CO: 'https://www.cancilleria.gov.co/tramites_servicios/visas',
+  PE: 'https://www.migraciones.gob.pe',
+};
+
+// Schengen 90/180 days note
+const SCHENGEN_NOTE = '90 days in any 180-day period across all Schengen Area countries. Includes Germany, France, Italy, Spain, Portugal, Netherlands, Belgium, Switzerland, Austria, Sweden, Norway, Denmark, Finland, Greece, Poland, Czechia, Hungary, Romania, Croatia, Slovakia, Slovenia and Iceland.';
+
+// ── PASSPORT DATA ──
+// Each key is a passport code; value is an object of destination code → visa info
+const PASSPORTS = {};
+
+// Helper to build Schengen VF block for strong passports
+function schengenVF(days=90) {
+  const codes = ['DE','FR','IT','ES','PT','NL','BE','CH','AT','SE','NO','DK','FI','GR','PL','CZ','HU','RO','HR','SK','SI','IS'];
+  const obj = {};
+  codes.forEach(c => { obj[c] = VF(days, SCHENGEN_NOTE); });
+  return obj;
+}
+
+// Helper for EU free movement (citizens get unlimited)
+function euFreeMovement() {
+  const codes = ['DE','FR','IT','ES','PT','NL','BE','CH','AT','SE','NO','DK','FI','GR','PL','CZ','HU','RO','HR','SK','SI','IS'];
+  const obj = {};
+  codes.forEach(c => { obj[c] = VF(null, 'EU/EEA citizens enjoy the right of free movement. No visa or time limit for residence purposes, though registration may be required after 3 months.'); });
+  return obj;
+}
+
+// ── US PASSPORT ──
+PASSPORTS['US'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required since January 2025. Multiple-entry permit valid 2 years or until passport expiry. Apply online before travel.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90, 'US citizens do not require a visa for Ireland. May stay up to 90 days per visit.'),
+  UA: VF(30, 'US citizens may visit Ukraine visa-free for up to 90 days in 180. Note: Travel not recommended due to ongoing conflict (2024-2025).'),
+  RU: VR(null, 'US citizens require a visa. Relations strained; consular services limited. E-visa system suspended for US nationals.', null, null, LINKS.RU),
+  BA: VF(90, 'Visa-free for up to 90 days.'),
+  ME: VF(90, 'Visa-free for US citizens up to 90 days.'),
+  RS: VF(90, 'Visa-free for up to 30 days.'),
+  AL: VF(90, 'Visa-free June–September; visa required rest of year for stays over 1 day. Verify before travel.'),
+  US: null,
+  CA: VF(180, 'US citizens may enter Canada freely without a visa and stay up to 6 months. No eTA required — only for air travel where it differs from road.'),
+  BR: VF(90, 'Brazil restored visa-free access for US citizens in October 2023. Up to 90 days, extendable to 180.', null, null, LINKS.BR),
+  MX: VF(180, 'US citizens can visit Mexico without a visa for tourism for up to 180 days. A tourist card (FMM) may be required on arrival.'),
+  AR: VF(90, 'Visa-free up to 90 days.'),
+  CL: VF(90, 'Visa-free up to 90 days.'),
+  CO: VF(90, 'Visa-free up to 90 days. Extension possible.'),
+  PE: VF(183, 'Visa-free for up to 183 days.'),
+  JM: VF(90, 'Visa-free for up to 90 days.'),
+  JP: VF(90, 'Visa-free for 90 days for tourism and business.'),
+  KR: ETA(90, 'K-ETA (Korea Electronic Travel Authorization) required. Apply online at least 72 hours before departure. Valid 2 years.', 'USD 10', '72 hours', LINKS.KR),
+  CN: VF(15, 'China introduced 15-day visa-free access for US citizens for tourism and business in November 2023 (renewed 2024). Valid for single entry stays up to 15 days.', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa required. Apply at least 4 days before travel. 60-day double-entry e-Tourist visa available.', 'USD 25–80', '3-5 days', LINKS.IN),
+  SG: VF(90, 'Visa-free for up to 30 days, extendable. No prior approval needed.', null, null, LINKS.SG),
+  MY: VF(90, 'Visa-free for up to 90 days.', null, null, LINKS.MY),
+  TH: VF(60, 'Thailand extended visa-free stay to 60 days for US citizens in 2024 (previously 30).', null, null, LINKS.TH),
+  VN: VF(45, 'Vietnam grants 45-day visa-free access to US citizens. Multi-entry.', null, null, LINKS.VN),
+  ID: VF(30, 'Visa-free on arrival for 30 days at main ports. Extendable once.', null, null, LINKS.ID),
+  PH: VF(30, 'Visa-free for 30 days on arrival. Extension available at BI offices up to 59 days.', null, null, LINKS.PH),
+  GE: VF(365, 'US citizens can stay in Georgia for up to 1 year visa-free.', null, null, LINKS.GE),
+  MV: VOA(30, 'Free visa on arrival for up to 30 days. Extendable for 90 days. Must show proof of accommodation and funds.', 'Free', 'On arrival', LINKS.MV),
+  AE: VF(30, 'US citizens get a free 30-day visa on arrival, extendable by 30 days.', null, null, LINKS.AE),
+  TR: EV(90, 'e-Visa required. Apply online before travel. 90 days in 180-day period.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90, 'Visa-free for up to 90 days. Entry at Ben Gurion airport. Security questioning is thorough.', null, null, LINKS.IL),
+  SA: EV(90, 'Saudi Arabia issues tourist e-Visa for US citizens. Apply via Visit Saudi portal.', 'SAR 300 + VAT', '1-3 days', LINKS.SA),
+  ZA: VF(90, 'Visa-free for up to 90 days.', null, null, LINKS.ZA),
+  KE: EV(90, 'Kenya now uses East Africa Tourist Visa (EAV) e-Visa system since Jan 2024. Apply online.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'Visa on arrival available at all main ports. Alternatively apply e-Visa online.', 'USD 25', 'On arrival', LINKS.EG),
+  MA: VF(90, 'Visa-free for up to 90 days.', null, null, LINKS.MA),
+  TZ: EV(90, 'Tanzania ETA required since 2024. Apply online before departure.', 'USD 50', '1-3 days', LINKS.TZ),
+  AU: ETA(12, 'ETA (subclass 601) required. Apply via app or travel agent. Multiple-entry, valid 1 year.', 'AUD 20', 'Instant–hours', LINKS.AU),
+  NZ: ETA(90, 'NZeTA required. Apply 72+ hours before travel. Multiple-entry valid 2 years.', 'NZD 23', '72 hours', LINKS.NZ),
+};
+
+// ── UK PASSPORT ──
+PASSPORTS['GB'] = {
+  ...schengenVF(90),
+  GB: null,
+  IE: VF(null, 'UK citizens have the right to live and work in Ireland under the Common Travel Area (CTA). No visa required.'),
+  UA: VF(90, 'Visa-free up to 90 days.'),
+  RU: VR(null, 'Visa required. UK-Russia relations are strained. Limited consular processing.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA (Electronic System for Travel Authorization) required. Apply at least 72 hours before travel. Multiple-entry valid 2 years.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required for air travel to Canada.', 'CAD 7', 'Minutes–days', LINKS.CA),
+  BR: VF(90, 'Visa-free since 2019. Up to 90 days.', null, null, LINKS.BR),
+  MX: VF(180, 'Visa-free up to 180 days.'), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90, 'Visa-free for UK citizens for up to 90 days.'),
+  KR: ETA(90, 'K-ETA required.', 'USD 10', '72 hours', LINKS.KR),
+  CN: VF(15, '15-day visa-free for UK citizens (2024).', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa required.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90),
+  TH: VF(60, '60-day visa-free for UK citizens (extended 2024).', null, null, LINKS.TH),
+  VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA 30 days.', 'Free', 'On arrival', LINKS.MV),
+  AE: VF(30), TR: EV(90, 'e-Visa required.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(90), KE: EV(90, 'EAV e-Visa.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA or e-Visa.', 'USD 25', 'On arrival', LINKS.EG),
+  MA: VF(90), TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+  AU: ETA(12, 'ETA subclass 601.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+};
+
+// ── GERMAN PASSPORT (strong EU) ──
+PASSPORTS['DE'] = {
+  ...euFreeMovement(),
+  DE: null,
+  GB: ETA(180, 'UK ETA required since Jan 2025 for German nationals.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(null, 'EU free movement rights apply in Ireland.'),
+  UA: VF(90), RU: VR(null, 'Visa required. Schengen-Russia visa relations suspended.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: ETA(90, 'K-ETA.', 'USD 10', '72 hours', LINKS.KR),
+  CN: VF(15, '15-day visa-free for German nationals (2024).', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN), SG: VF(30), MY: VF(90),
+  TH: VF(60, '60-day visa-free.', null, null, LINKS.TH),
+  VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(90), KE: EV(90, 'EAV e-Visa.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA or e-Visa.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+  AU: ETA(12, 'ETA subclass 601.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+};
+
+// EU passports (FR, IT, ES, PT, NL, BE, AT, SE, DK, FI, PL, IE) — similar to DE
+['FR','IT','ES','PT','NL','BE','AT','SE','NO','DK','FI','GR','PL','CZ','HU','RO','HR','SK','SI','IS'].forEach(code => {
+  PASSPORTS[code] = JSON.parse(JSON.stringify(PASSPORTS['DE']));
+  PASSPORTS[code][code] = null;
+  if (code === 'IS' || code === 'NO') {
+    // EEA not EU, same rights broadly
+  }
+});
+
+// Ireland: CTA with UK, rest same as EU
+PASSPORTS['IE'] = JSON.parse(JSON.stringify(PASSPORTS['DE']));
+PASSPORTS['IE']['IE'] = null;
+PASSPORTS['IE']['GB'] = VF(null, 'Irish citizens have the right to live and work in the UK under the Common Travel Area (CTA). No visa or ETA required.'); // CTA exemption
+
+// ── AUSTRALIAN PASSPORT ──
+PASSPORTS['AU'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required since Jan 2025 for Australian nationals.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90),
+  RU: VR(null, 'Visa required.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VR(null, 'Australian citizens require a visa for Brazil.', null, '15+ days', LINKS.BR),
+  MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: ETA(90, 'K-ETA.', 'USD 10', '72 hours', LINKS.KR),
+  CN: VF(15, '15-day visa-free for Australian nationals (2024).', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN), SG: VF(30), MY: VF(90),
+  TH: VF(60, '60-day visa-free (extended 2024).', null, null, LINKS.TH),
+  VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: null,
+  NZ: VF(null, 'Australian citizens have the right to live and work in New Zealand indefinitely under the Trans-Tasman Travel Arrangement.'),
+  AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(90), KE: EV(90, 'EAV e-Visa.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA or e-Visa.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── NEW ZEALAND PASSPORT ──
+PASSPORTS['NZ'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VR(null, 'Visa required.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VR(null, 'Visa required for NZ citizens.', null, null, LINKS.BR),
+  MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: ETA(90, 'K-ETA.', 'USD 10', '72 hours', LINKS.KR),
+  CN: VF(15, '15-day visa-free (2024).', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN), SG: VF(30), MY: VF(90),
+  TH: VF(60), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: VF(null, 'NZ citizens have the right to live and work in Australia indefinitely under the Trans-Tasman Travel Arrangement.'),
+  NZ: null,
+  AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(90), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA or e-Visa.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── CANADIAN PASSPORT ──
+PASSPORTS['CA'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VR(null, 'Visa required.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: VF(180, 'Canadian citizens may enter the US without a visa for up to 6 months. No ESTA required.'),
+  CA: null,
+  BR: VF(90, 'Visa-free for Canadians.', null, null, LINKS.BR),
+  MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: ETA(90, 'K-ETA.', 'USD 10', '72 hours', LINKS.KR),
+  CN: VF(15, '15-day visa-free (2024).', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN), SG: VF(30), MY: VF(90),
+  TH: VF(60, '60-day visa-free (extended 2024).', null, null, LINKS.TH),
+  VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(90), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA or e-Visa.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── JAPANESE PASSPORT ──
+PASSPORTS['JP'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required since Jan 2025.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VR(null, 'Visa required.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: null,
+  KR: VF(90, 'Visa-free for up to 90 days.'),
+  CN: VR(null, 'Japan-China visa-free suspended. Visa required for Japanese nationals.', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: VF(90, 'Visa-free for Japanese passport holders.'),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(90), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── SINGAPORE PASSPORT ──
+PASSPORTS['SG'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VR(null, 'Visa required.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: VF(90),
+  CN: VF(30, 'Singapore-China mutual 30-day visa-free (2023).'),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: null, MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: VF(90), IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(90), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── SOUTH KOREAN PASSPORT ──
+PASSPORTS['KR'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VR(null, 'Visa required.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: null,
+  CN: VF(15, '15-day visa-free for South Korean nationals (2024).', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: VF(90), IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(90), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── MALAYSIAN PASSPORT ──
+PASSPORTS['MY'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VR(null, 'Visa required.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: VR(null, 'Visa required for Malaysian citizens to visit Canada.', null, null, LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(30), KR: VF(30),
+  CN: VF(30, 'Malaysia-China 30-day mutual visa-free.'),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: null, TH: VF(30), VN: VF(30), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: VF(90),
+  IL: VR(null, 'Malaysia and Israel have no diplomatic relations. Malaysian passports are not valid for travel to Israel and entry is generally denied.'),
+  SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── UAE PASSPORT ──
+PASSPORTS['AE'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VF(90, 'UAE citizens visa-free to Russia.'),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: VF(30), CN: VF(30, 'China 30-day visa-free for UAE.'), 
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(30), TH: VF(30), VN: VF(90), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: null, TR: VF(90), IL: VF(30, 'UAE-Israel Abraham Accords. Visa-free since 2020.'),
+  SA: VF(90, 'GCC citizens enjoy free movement between member states.'),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VF(90, 'UAE citizens visa-free to Egypt.'), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── ISRAELI PASSPORT ──
+PASSPORTS['IL'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90),
+  RU: VF(90, 'Israel-Russia mutual visa-free.'),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required. Israel joined Visa Waiver Program in 2023.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: VF(90), CN: VR(null, 'Visa required for Israeli passport.', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VR(null, 'Entry denied — no diplomatic relations between Malaysia and Israel.'),
+  TH: VF(30), VN: VF(45), ID: VR(null, 'Visa required. Entry may be restricted.'),
+  PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30, 'Abraham Accords normalization (2020). Visa-free.'),
+  TR: VR(null, 'Turkey suspended visa-free access for Israeli passport holders in 2024.'),
+  IL: null, SA: VR(null, 'No diplomatic relations. Entry not permitted.'),
+  ZA: VF(90), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VF(90, 'Peace treaty allows visa-free entry for Israelis.'), MA: VF(90, 'Abraham Accords 2020.'),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── TURKISH PASSPORT ──
+PASSPORTS['TR'] = {
+  DE: VF(90, SCHENGEN_NOTE), FR: VF(90), IT: VF(90), ES: VF(90), PT: VF(90),
+  NL: VF(90), BE: VF(90), CH: VF(90), AT: VF(90), SE: VF(90),
+  NO: VF(90), DK: VF(90), FI: VF(90), GR: VF(90), PL: VF(90),
+  CZ: VF(90), HU: VF(90), RO: VF(90), HR: VF(90), SK: VF(90), SI: VF(90), IS: VF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VR(null, 'Irish visa required for Turkish nationals.', null, null, LINKS.IE),
+  UA: VF(30), RU: VF(60, 'Turkey-Russia mutual visa-free for up to 60 days.'),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: VR(null, 'US B-1/B-2 tourist visa required.', null, null, LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VR(null, 'Japanese visa required.', null, null, LINKS.JP),
+  KR: VR(null, 'Korean visa required.', null, null, LINKS.KR),
+  CN: VR(null, 'Chinese visa required.', null, null, LINKS.CN),
+  IN: EV(60, 'Indian e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: EV(null, 'Electronic Visitor (subclass 651) visa required.', null, null, LINKS.AU),
+  NZ: EV(null, 'NZeTA may not be available; tourist visa required.', null, null, LINKS.NZ),
+  AE: VF(30), TR: null, IL: VF(90, 'Turkey suspended visa-free for Israelis 2024. Currently Israelis need visa.'),
+  SA: VF(90, 'OIC countries enjoy some facilitated access.'),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VF(90), MA: VF(90), TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── RUSSIAN PASSPORT ──
+PASSPORTS['RU'] = {
+  DE: VR(null, 'Russian citizens currently require Schengen visa. Processing severely restricted due to Ukraine war sanctions.'),
+  FR: VR(null, 'Schengen visa required. Processing highly restricted.'),
+  IT: VR(null, 'Schengen visa required. Processing highly restricted.'),
+  ES: VR(null, 'Schengen visa required.'), PT: VR(null, 'Schengen visa required.'),
+  NL: VR(null, 'Schengen visa required.'), BE: VR(null, 'Schengen visa required.'),
+  CH: VR(null, 'Swiss visa required.'), AT: VR(null, 'Schengen visa required.'),
+  SE: VR(null, 'Schengen visa required.'), NO: VR(null, 'Schengen visa required.'),
+  DK: VR(null, 'Schengen visa required.'), FI: VR(null, 'Schengen visa required. Finland closed border crossings with Russia in 2023.'),
+  GR: VR(null, 'Schengen visa required.'), PL: VR(null, 'Schengen visa required.'),
+  CZ: VR(null, 'Schengen visa required.'), HU: VR(null, 'Schengen visa required.'),
+  RO: VR(null, 'Schengen visa required.'), HR: VR(null, 'Schengen visa required.'),
+  SK: VR(null, 'Schengen visa required.'), SI: VR(null, 'Schengen visa required.'),
+  IS: VR(null, 'Icelandic visa required.'),
+  GB: VR(null, 'UK visa required. UK-Russia relations are severed.', null, null, LINKS.GB),
+  IE: VR(null, 'Irish visa required.'),
+  UA: VR(null, 'No diplomatic relations. Entry not possible.'),
+  RU: null,
+  BA: VF(30, 'Bosnia-Russia visa-free.'), ME: VF(30), RS: VF(30, 'Russia-Serbia bilateral agreement.'), AL: VR(null, 'Visa required.'),
+  US: VR(null, 'US B-2 visa required. US-Russia consular services suspended at most locations.', null, null, LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: VF(90, 'Brazil-Russia mutual visa-free.'), MX: VF(180), AR: VF(90), CL: VF(90),
+  CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VR(null, 'Japanese visa required. Japan-Russia relations deteriorated post-2022.', null, null, LINKS.JP),
+  KR: VR(null, 'Korean visa required.', null, null, LINKS.KR),
+  CN: VF(15, '15-day visa-free for Russia.'), 
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: VR(null, 'Australian visa required.', null, null, LINKS.AU),
+  NZ: VR(null, 'NZ visa required.', null, null, LINKS.NZ),
+  AE: VF(90, 'UAE-Russia visa-free for up to 90 days.'), TR: VF(60, 'Turkey-Russia mutual visa-free 60 days.'),
+  IL: VF(90, 'Israel-Russia mutual visa-free.'), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VF(90), MA: VR(null, 'Visa required.'), TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── CHINESE PASSPORT ──
+PASSPORTS['CN'] = {
+  DE: VF(15, 'China-Germany mutual 15-day visa-free (2024).'), FR: VF(15), IT: VF(15), ES: VF(15), PT: VR(null, 'Visa required.'),
+  NL: VF(15), BE: VR(null, 'Visa required.'), CH: VR(null, 'Swiss visa required.'), AT: VR(null, 'Visa required.'),
+  SE: VR(null, 'Visa required.'), NO: VR(null, 'Visa required.'), DK: VR(null, 'Visa required.'),
+  FI: VR(null, 'Visa required.'), GR: VR(null, 'Visa required.'), PL: VR(null, 'Visa required.'),
+  CZ: VR(null, 'Visa required.'), HU: VF(30, 'China-Hungary mutual visa-free 2024.'),
+  RO: VR(null, 'Visa required.'), HR: VR(null, 'Visa required.'), SK: VR(null, 'Visa required.'),
+  SI: VR(null, 'Visa required.'), IS: VR(null, 'Visa required.'),
+  GB: VR(null, 'UK visa required for Chinese nationals.', null, null, LINKS.GB),
+  IE: VR(null, 'Irish visa required.'),
+  UA: VF(30, 'China-Ukraine visa-free agreement.'), RU: VF(30, 'China-Russia mutual visa-free.'),
+  BA: VF(30), ME: VF(30), RS: VF(30), AL: VR(null, 'Visa required.'),
+  US: VR(null, 'US B-2 tourist visa required. Processing can take weeks.', null, null, LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: VF(90), MX: VR(null, 'Visa required.'), AR: VF(90), CL: VF(90), CO: VR(null, 'Visa required.'),
+  PE: VF(183), JM: VR(null, 'Visa required.'),
+  JP: VR(null, 'Japanese visa required. China-Japan visa-free suspended.', null, null, LINKS.JP),
+  KR: VR(null, 'Korean visa required.', null, null, LINKS.KR),
+  CN: null,
+  IN: VR(null, 'Indian visa required. Relations strained.', null, null, LINKS.IN),
+  SG: VF(30), MY: VF(30, 'Malaysia-China mutual visa-free.'), TH: VF(30), VN: VF(15), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: VR(null, 'Australian visa required.', null, null, LINKS.AU),
+  NZ: VR(null, 'NZ visa required.', null, null, LINKS.NZ),
+  AE: VF(30), TR: VF(30, 'China-Turkey visa-free.'),
+  IL: VR(null, 'Israeli visa required.'), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VF(30, 'Egypt-China mutual visa-free.'), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── INDIAN PASSPORT ──
+PASSPORTS['IN'] = {
+  DE: VR(null, 'Schengen visa required.'), FR: VR(null, 'Schengen visa required.'), IT: VR(null, 'Schengen visa required.'),
+  ES: VR(null, 'Schengen visa required.'), PT: VR(null, 'Schengen visa required.'),
+  NL: VR(null, 'Schengen visa required.'), BE: VR(null, 'Schengen visa required.'),
+  CH: VR(null, 'Swiss visa required.'), AT: VR(null, 'Schengen visa required.'),
+  SE: VR(null, 'Schengen visa required.'), NO: VR(null, 'Schengen visa required.'),
+  DK: VR(null, 'Schengen visa required.'), FI: VR(null, 'Schengen visa required.'),
+  GR: VR(null, 'Schengen visa required.'), PL: VR(null, 'Schengen visa required.'),
+  CZ: VR(null, 'Schengen visa required.'), HU: VR(null, 'Schengen visa required.'),
+  RO: VR(null, 'Schengen visa required.'), HR: VR(null, 'Schengen visa required.'),
+  SK: VR(null, 'Schengen visa required.'), SI: VR(null, 'Schengen visa required.'), IS: VR(null, 'Visa required.'),
+  GB: VR(null, 'UK Standard Visitor visa required.', null, null, LINKS.GB),
+  IE: VR(null, 'Irish visa required.'),
+  UA: EV(30, 'e-Visa available for Indian nationals.', null, null, LINKS.UA),
+  RU: EV(60, 'e-Visa available.', null, null, LINKS.RU),
+  BA: VF(30), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: VR(null, 'US B-2 visa required. Long processing times common.', null, null, LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(30),
+  JP: VR(null, 'Japanese visa required.', null, null, LINKS.JP),
+  KR: VR(null, 'Korean visa required.', null, null, LINKS.KR),
+  CN: VR(null, 'Chinese visa required. Relations complex.', null, null, LINKS.CN),
+  IN: null,
+  SG: EV(30, 'Singapore e-Visa required.', null, '3-5 days', LINKS.SG),
+  MY: VF(30, 'India-Malaysia visa-free 30 days.'), TH: VOA(30, 'Visa on arrival or e-Visa.', 'THB 2000', 'On arrival', LINKS.TH),
+  VN: EV(90, 'Vietnam e-Visa.', 'USD 25', '3 days', LINKS.VN), ID: VOA(30, 'Visa on arrival.', 'USD 35', 'On arrival', LINKS.ID),
+  PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: VR(null, 'Australian visa required (Visitor subclass 600).', null, null, LINKS.AU),
+  NZ: VR(null, 'NZ visitor visa required.', null, null, LINKS.NZ),
+  AE: VOA(30, 'Indians with valid US/UK/Schengen visa get UAE VOA. Otherwise e-Visa required.', 'AED 100', 'On arrival', LINKS.AE),
+  TR: EV(90, 'Turkish e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90, 'India-Israel visa-free since 2023.'),
+  SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VR(null, 'South Africa visa required.', null, null, LINKS.ZA),
+  KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA available.', 'USD 25', 'On arrival', LINKS.EG), MA: VR(null, 'Visa required.'),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── BRAZILIAN PASSPORT ──
+PASSPORTS['BR'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VF(90, 'Brazil-Russia bilateral.'), BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required. Brazil joined VWP scope discussions; ESTA applies.', 'USD 21', '72 hours', LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: null, MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: VF(90), CN: VR(null, 'Chinese visa required.', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: VF(90), IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── SOUTH AFRICAN PASSPORT ──
+PASSPORTS['ZA'] = {
+  DE: VF(90, SCHENGEN_NOTE), FR: VF(90), IT: VF(90), ES: VF(90), PT: VF(90),
+  NL: VF(90), BE: VF(90), CH: VF(90), AT: VF(90), SE: VF(90), NO: VF(90), DK: VF(90),
+  FI: VF(90), GR: VF(90), PL: VF(90), CZ: VF(90), HU: VF(90), RO: VF(90), HR: VF(90),
+  SK: VF(90), SI: VF(90), IS: VF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VR(null, 'Visa required.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: VR(null, 'US B-2 visa required.', null, null, LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: VF(90), CN: VR(null, 'Chinese visa required.', null, null, LINKS.CN),
+  IN: VR(null, 'Indian visa required.', null, null, LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VOA(30, 'VOA available.', 'THB 2000', 'On arrival', LINKS.TH),
+  VN: EV(90, 'e-Visa.', 'USD 25', '3 days', LINKS.VN), ID: VOA(30, 'VOA.', 'USD 35', 'On arrival', LINKS.ID),
+  PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: VR(null, 'Australian visa required.', null, null, LINKS.AU),
+  NZ: VR(null, 'NZ visa required.', null, null, LINKS.NZ),
+  AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: null, KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── NIGERIAN PASSPORT ──
+PASSPORTS['NG'] = {
+  DE: VR(null, 'Schengen visa required. High denial rates.'), FR: VR(null, 'Schengen visa required.'),
+  IT: VR(null, 'Schengen visa required.'), ES: VR(null, 'Schengen visa required.'),
+  PT: VR(null, 'Schengen visa required.'), NL: VR(null, 'Schengen visa required.'),
+  BE: VR(null, 'Schengen visa required.'), CH: VR(null, 'Swiss visa required.'),
+  AT: VR(null, 'Schengen visa required.'), SE: VR(null, 'Schengen visa required.'),
+  NO: VR(null, 'Schengen visa required.'), DK: VR(null, 'Schengen visa required.'),
+  FI: VR(null, 'Schengen visa required.'), GR: VR(null, 'Schengen visa required.'),
+  PL: VR(null, 'Schengen visa required.'), CZ: VR(null, 'Schengen visa required.'),
+  HU: VR(null, 'Schengen visa required.'), RO: VR(null, 'Visa required.'),
+  HR: VR(null, 'Schengen visa required.'), SK: VR(null, 'Schengen visa required.'),
+  SI: VR(null, 'Schengen visa required.'), IS: VR(null, 'Visa required.'),
+  GB: VR(null, 'UK Standard Visitor visa required. High denial rates.', null, null, LINKS.GB),
+  IE: VR(null, 'Irish visa required.'), UA: VF(90), RU: VR(null, 'Visa required.'),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: VR(null, 'US B-2 visa required.', null, null, LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(30),
+  JP: VR(null, 'Japanese visa required.', null, null, LINKS.JP),
+  KR: VR(null, 'Korean visa required.', null, null, LINKS.KR),
+  CN: VR(null, 'Chinese visa required.', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa available.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VR(null, 'Singapore visa required.', null, null, LINKS.SG), MY: VR(null, 'Visa required.'),
+  TH: VOA(30, 'VOA.', 'THB 2000', 'On arrival', LINKS.TH),
+  VN: EV(90, 'e-Visa.', 'USD 25', '3 days', LINKS.VN), ID: VOA(30, 'VOA.', 'USD 35', 'On arrival', LINKS.ID),
+  PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: VR(null, 'Australian visa required.', null, null, LINKS.AU),
+  NZ: VR(null, 'NZ visa required.', null, null, LINKS.NZ),
+  AE: VF(30, 'UAE grants Nigerian passport holders visa on arrival.'),
+  TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VR(null, 'South Africa visa required.', null, null, LINKS.ZA),
+  KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(30),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+  NG: null,
+};
+
+// ── Pakistani PASSPORT ──
+PASSPORTS['PK'] = {
+  DE: VR(null, 'Schengen visa required.'), FR: VR(null, 'Schengen visa required.'),
+  IT: VR(null, 'Schengen visa required.'), ES: VR(null, 'Schengen visa required.'),
+  PT: VR(null, 'Schengen visa required.'), NL: VR(null, 'Schengen visa required.'),
+  BE: VR(null, 'Schengen visa required.'), CH: VR(null, 'Swiss visa required.'),
+  AT: VR(null, 'Schengen visa required.'), SE: VR(null, 'Schengen visa required.'),
+  NO: VR(null, 'Schengen visa required.'), DK: VR(null, 'Schengen visa required.'),
+  FI: VR(null, 'Schengen visa required.'), GR: VR(null, 'Schengen visa required.'),
+  PL: VR(null, 'Schengen visa required.'), CZ: VR(null, 'Schengen visa required.'),
+  HU: VR(null, 'Schengen visa required.'), RO: VR(null, 'Visa required.'),
+  HR: VR(null, 'Schengen visa required.'), SK: VR(null, 'Schengen visa required.'),
+  SI: VR(null, 'Schengen visa required.'), IS: VR(null, 'Visa required.'),
+  GB: VR(null, 'UK visa required.', null, null, LINKS.GB),
+  IE: VR(null, 'Irish visa required.'), UA: VF(90), RU: EV(30, 'e-Visa available.', null, null, LINKS.RU),
+  BA: VF(90), ME: VF(90), RS: VF(30), AL: VF(90),
+  US: VR(null, 'US B-2 visa required.', null, null, LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(30),
+  JP: VR(null, 'Japanese visa required.', null, null, LINKS.JP),
+  KR: VR(null, 'Korean visa required.', null, null, LINKS.KR),
+  CN: VF(30, 'China-Pakistan all-weather friendship: 30-day visa-free.'),
+  IN: VR(null, 'Entry not permitted. No diplomatic relations for tourism.', null, null, LINKS.IN),
+  SG: VR(null, 'Singapore visa required.', null, null, LINKS.SG), MY: VF(30),
+  TH: VOA(30, 'VOA.', 'THB 2000', 'On arrival', LINKS.TH),
+  VN: EV(90, 'e-Visa.', 'USD 25', '3 days', LINKS.VN), ID: VOA(30, 'VOA.', 'USD 35', 'On arrival', LINKS.ID),
+  PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: VR(null, 'Australian visa required.', null, null, LINKS.AU),
+  NZ: VR(null, 'NZ visa required.', null, null, LINKS.NZ),
+  AE: VOA(30, 'UAE VOA for Pakistani nationals.', 'AED 100', 'On arrival', LINKS.AE),
+  TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VR(null, 'Entry not permitted. Pakistan does not recognize Israel.'),
+  SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VR(null, 'Visa required.', null, null, LINKS.ZA),
+  KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VR(null, 'Visa required.'),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+  PK: null,
+};
+
+// ── SAUDI PASSPORT ──
+PASSPORTS['SA'] = {
+  DE: VF(90, SCHENGEN_NOTE), FR: VF(90), IT: VF(90), ES: VF(90), PT: VF(90),
+  NL: VF(90), BE: VF(90), CH: VF(90), AT: VF(90), SE: VF(90), NO: VF(90),
+  DK: VF(90), FI: VF(90), GR: VF(90), PL: VF(90), CZ: VF(90), HU: VF(90),
+  RO: VF(90), HR: VF(90), SK: VF(90), SI: VF(90), IS: VF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VF(90), BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: VF(90), CN: VF(30),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(90, 'GCC free movement.'), TR: VF(90), IL: VR(null, 'No diplomatic relations. Entry not permitted.'),
+  SA: null, ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VF(90), MA: VF(90), TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── MEXICAN PASSPORT ──
+PASSPORTS['MX'] = {
+  ...schengenVF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VF(90), BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: VR(null, 'US B-2 tourist visa required for Mexican nationals.', null, null, LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: null, AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: VF(90), CN: VR(null, 'Chinese visa required.', null, null, LINKS.CN),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── THAI PASSPORT ──
+PASSPORTS['TH'] = {
+  DE: VF(90, SCHENGEN_NOTE), FR: VF(90), IT: VF(90), ES: VF(90), PT: VF(90),
+  NL: VF(90), BE: VF(90), CH: VF(90), AT: VF(90), SE: VF(90), NO: VF(90),
+  DK: VF(90), FI: VF(90), GR: VF(90), PL: VF(90), CZ: VF(90), HU: VF(90),
+  RO: VF(90), HR: VF(90), SK: VF(90), SI: VF(90), IS: VF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: VF(90), RU: VF(90), BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: VR(null, 'US B-2 visa required for Thai nationals.', null, null, LINKS.US),
+  CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(30),
+  JP: VF(90), KR: VF(90),
+  CN: VF(30, 'Thailand-China mutual 30-day visa-free (2024).'),
+  IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(30), TH: null, VN: VF(30), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU),
+  NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+  IL: VF(90), SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// Remaining passports: AR, CL, CO (Latin America, similar profile), PH, ID, VN (SEA), KE, MA, EG, GH (Africa), UA, JM
+['AR','CL','CO'].forEach(code => {
+  PASSPORTS[code] = {
+    DE: VF(90), FR: VF(90), IT: VF(90), ES: VF(90), PT: VF(90), NL: VF(90), BE: VF(90), CH: VF(90), AT: VF(90),
+    SE: VF(90), NO: VF(90), DK: VF(90), FI: VF(90), GR: VF(90), PL: VF(90), CZ: VF(90), HU: VF(90), RO: VF(90),
+    HR: VF(90), SK: VF(90), SI: VF(90), IS: VF(90),
+    GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+    IE: VF(90), UA: VF(90), RU: VF(90), BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+    US: VR(null, 'US B-2 visa required.', null, null, LINKS.US),
+    CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+    BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+    JP: VF(90), KR: VF(90), CN: VR(null, 'Chinese visa required.', null, null, LINKS.CN),
+    IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+    SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+    MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+    AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU), NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+    AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR), IL: VF(90),
+    SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+    ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+    EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+    TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+    [code]: null,
+  };
+});
+
+['PH','ID','VN'].forEach(code => {
+  PASSPORTS[code] = {
+    DE: VF(90), FR: VF(90), IT: VF(90), ES: VF(90), PT: VF(90), NL: VF(90), BE: VF(90), CH: VF(90), AT: VF(90),
+    SE: VF(90), NO: VF(90), DK: VF(90), FI: VF(90), GR: VF(90), PL: VF(90), CZ: VF(90), HU: VF(90), RO: VF(90),
+    HR: VF(90), SK: VF(90), SI: VF(90), IS: VF(90),
+    GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+    IE: VF(90), UA: VF(90), RU: EV(30, 'e-Visa.'), BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+    US: VR(null, 'US B-2 visa required.', null, null, LINKS.US),
+    CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+    BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(30),
+    JP: VF(30), KR: VF(30), CN: VF(15), IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+    SG: VF(30), MY: VF(30), TH: VF(30), VN: VF(30), ID: VF(30), PH: VF(30), GE: VF(365),
+    MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+    AU: EV(null, 'Australian visa required.', null, null, LINKS.AU),
+    NZ: VR(null, 'NZ visa required.', null, null, LINKS.NZ),
+    AE: VOA(30, 'VOA available.', 'AED 100', 'On arrival', LINKS.AE),
+    TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR), IL: VF(90),
+    SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+    ZA: VR(null, 'Visa required.', null, null, LINKS.ZA),
+    KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+    EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VR(null, 'Visa required.'),
+    TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+    [code]: null,
+  };
+});
+
+['KE','GH','JM'].forEach(code => {
+  PASSPORTS[code] = {
+    DE: VR(null, 'Schengen visa required.'), FR: VR(null, 'Schengen visa required.'), IT: VR(null, 'Schengen visa required.'),
+    ES: VR(null, 'Schengen visa required.'), PT: VR(null, 'Schengen visa required.'), NL: VR(null, 'Schengen visa required.'),
+    BE: VR(null, 'Schengen visa required.'), CH: VR(null, 'Swiss visa required.'), AT: VR(null, 'Schengen visa required.'),
+    SE: VR(null, 'Schengen visa required.'), NO: VR(null, 'Schengen visa required.'), DK: VR(null, 'Schengen visa required.'),
+    FI: VR(null, 'Schengen visa required.'), GR: VR(null, 'Schengen visa required.'), PL: VR(null, 'Schengen visa required.'),
+    CZ: VR(null, 'Schengen visa required.'), HU: VR(null, 'Schengen visa required.'), RO: VR(null, 'Visa required.'),
+    HR: VR(null, 'Schengen visa required.'), SK: VR(null, 'Schengen visa required.'), SI: VR(null, 'Schengen visa required.'),
+    IS: VR(null, 'Visa required.'),
+    GB: VR(null, 'UK Standard Visitor visa required.', null, null, LINKS.GB),
+    IE: VR(null, 'Irish visa required.'), UA: VF(90), RU: VR(null, 'Visa required.'),
+    BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+    US: VR(null, 'US B-2 visa required.', null, null, LINKS.US),
+    CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+    BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(30),
+    JP: VR(null, 'Japanese visa required.', null, null, LINKS.JP), KR: VR(null, 'Korean visa required.', null, null, LINKS.KR),
+    CN: VR(null, 'Chinese visa required.', null, null, LINKS.CN), IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+    SG: VR(null, 'Singapore visa required.', null, null, LINKS.SG), MY: VR(null, 'Visa required.'),
+    TH: VOA(30, 'VOA.', 'THB 2000', 'On arrival', LINKS.TH), VN: EV(90, 'e-Visa.', 'USD 25', '3 days', LINKS.VN),
+    ID: VOA(30, 'VOA.', 'USD 35', 'On arrival', LINKS.ID), PH: VF(30), GE: VF(365),
+    MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+    AU: VR(null, 'Australian visa required.', null, null, LINKS.AU), NZ: VR(null, 'NZ visa required.', null, null, LINKS.NZ),
+    AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR), IL: VF(90),
+    SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+    ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+    EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(30),
+    TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+    [code]: null,
+  };
+});
+
+['MA','EG'].forEach(code => {
+  PASSPORTS[code] = {
+    DE: VR(null, 'Schengen visa required.'), FR: VR(null, 'Schengen visa required.'), IT: VR(null, 'Schengen visa required.'),
+    ES: VR(null, 'Schengen visa required.'), PT: VR(null, 'Schengen visa required.'), NL: VR(null, 'Schengen visa required.'),
+    BE: VR(null, 'Schengen visa required.'), CH: VR(null, 'Swiss visa required.'), AT: VR(null, 'Schengen visa required.'),
+    SE: VR(null, 'Schengen visa required.'), NO: VR(null, 'Schengen visa required.'), DK: VR(null, 'Schengen visa required.'),
+    FI: VR(null, 'Schengen visa required.'), GR: VR(null, 'Schengen visa required.'), PL: VR(null, 'Schengen visa required.'),
+    CZ: VR(null, 'Schengen visa required.'), HU: VR(null, 'Schengen visa required.'), RO: VR(null, 'Visa required.'),
+    HR: VR(null, 'Schengen visa required.'), SK: VR(null, 'Schengen visa required.'), SI: VR(null, 'Schengen visa required.'),
+    IS: VR(null, 'Visa required.'),
+    GB: VR(null, 'UK Standard Visitor visa required.', null, null, LINKS.GB),
+    IE: VR(null, 'Irish visa required.'), UA: VF(90), RU: VR(null, 'Visa required.'),
+    BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+    US: VR(null, 'US B-2 visa required.', null, null, LINKS.US),
+    CA: VR(null, 'Canadian visa required.', null, null, LINKS.CA),
+    BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(30),
+    JP: VR(null, 'Japanese visa required.', null, null, LINKS.JP), KR: VR(null, 'Korean visa required.', null, null, LINKS.KR),
+    CN: VF(30, 'China-Arab states mutual agreements.'), IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+    SG: VR(null, 'Singapore visa required.', null, null, LINKS.SG), MY: VF(30),
+    TH: VOA(30, 'VOA.', 'THB 2000', 'On arrival', LINKS.TH), VN: EV(90, 'e-Visa.', 'USD 25', '3 days', LINKS.VN),
+    ID: VOA(30, 'VOA.', 'USD 35', 'On arrival', LINKS.ID), PH: VF(30), GE: VF(365),
+    MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+    AU: VR(null, 'Australian visa required.', null, null, LINKS.AU), NZ: VR(null, 'NZ visa required.', null, null, LINKS.NZ),
+    AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR),
+    IL: code === 'MA' ? VF(90, 'Morocco-Israel Abraham Accords (2020). Visa-free.') : VF(90, 'Egypt-Israel peace treaty. Visa-free.'),
+    SA: VF(90, 'Arab League facilitated travel.'),
+    ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE), EG: VF(90), MA: VF(90),
+    TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+    [code]: null,
+  };
+});
+
+// Ukraine passport
+PASSPORTS['UA'] = {
+  DE: VF(90), FR: VF(90), IT: VF(90), ES: VF(90), PT: VF(90), NL: VF(90), BE: VF(90), CH: VF(90), AT: VF(90),
+  SE: VF(90), NO: VF(90), DK: VF(90), FI: VF(90), GR: VF(90), PL: VF(90), CZ: VF(90), HU: VF(90), RO: VF(90),
+  HR: VF(90), SK: VF(90), SI: VF(90), IS: VF(90),
+  GB: ETA(180, 'UK ETA required.', '£10', '1-3 days', LINKS.GB),
+  IE: VF(90), UA: null, RU: VR(null, 'Entry not possible. War ongoing.'),
+  BA: VF(90), ME: VF(90), RS: VF(90), AL: VF(90),
+  US: ETA(90, 'ESTA required since Ukraine joined VWP in 2024.', 'USD 21', '72 hours', LINKS.US),
+  CA: ETA(180, 'eTA required.', 'CAD 7', 'Minutes', LINKS.CA),
+  BR: VF(90), MX: VF(180), AR: VF(90), CL: VF(90), CO: VF(90), PE: VF(183), JM: VF(90),
+  JP: VF(90), KR: VF(90), CN: VF(30), IN: EV(60, 'e-Visa.', 'USD 25', '3-5 days', LINKS.IN),
+  SG: VF(30), MY: VF(90), TH: VF(30), VN: VF(45), ID: VF(30), PH: VF(30), GE: VF(365),
+  MV: VOA(30, 'Free VOA.', 'Free', 'On arrival', LINKS.MV),
+  AU: ETA(12, 'ETA.', 'AUD 20', 'Instant', LINKS.AU), NZ: ETA(90, 'NZeTA.', 'NZD 23', '72 hours', LINKS.NZ),
+  AE: VF(30), TR: EV(90, 'e-Visa.', 'USD 50', 'Minutes', LINKS.TR), IL: VF(90),
+  SA: EV(90, 'Tourist e-Visa.', 'SAR 300', '1-3 days', LINKS.SA),
+  ZA: VF(30), KE: EV(90, 'EAV.', 'USD 50', '2-3 days', LINKS.KE),
+  EG: VOA(30, 'VOA.', 'USD 25', 'On arrival', LINKS.EG), MA: VF(90),
+  TZ: EV(90, 'ETA.', 'USD 50', '1-3 days', LINKS.TZ),
+};
+
+// ── PASSPORT LIST ──
+const PASSPORT_LIST = [
+  { code:'US', name:'United States', flag:'🇺🇸' },
+  { code:'GB', name:'United Kingdom', flag:'🇬🇧' },
+  { code:'DE', name:'Germany', flag:'🇩🇪' },
+  { code:'FR', name:'France', flag:'🇫🇷' },
+  { code:'IT', name:'Italy', flag:'🇮🇹' },
+  { code:'ES', name:'Spain', flag:'🇪🇸' },
+  { code:'PT', name:'Portugal', flag:'🇵🇹' },
+  { code:'NL', name:'Netherlands', flag:'🇳🇱' },
+  { code:'BE', name:'Belgium', flag:'🇧🇪' },
+  { code:'CH', name:'Switzerland', flag:'🇨🇭' },
+  { code:'AT', name:'Austria', flag:'🇦🇹' },
+  { code:'SE', name:'Sweden', flag:'🇸🇪' },
+  { code:'NO', name:'Norway', flag:'🇳🇴' },
+  { code:'DK', name:'Denmark', flag:'🇩🇰' },
+  { code:'FI', name:'Finland', flag:'🇫🇮' },
+  { code:'GR', name:'Greece', flag:'🇬🇷' },
+  { code:'PL', name:'Poland', flag:'🇵🇱' },
+  { code:'CZ', name:'Czechia', flag:'🇨🇿' },
+  { code:'HU', name:'Hungary', flag:'🇭🇺' },
+  { code:'RO', name:'Romania', flag:'🇷🇴' },
+  { code:'HR', name:'Croatia', flag:'🇭🇷' },
+  { code:'SK', name:'Slovakia', flag:'🇸🇰' },
+  { code:'SI', name:'Slovenia', flag:'🇸🇮' },
+  { code:'IS', name:'Iceland', flag:'🇮🇸' },
+  { code:'IE', name:'Ireland', flag:'🇮🇪' },
+  { code:'UA', name:'Ukraine', flag:'🇺🇦' },
+  { code:'RU', name:'Russia', flag:'🇷🇺' },
+  { code:'JP', name:'Japan', flag:'🇯🇵' },
+  { code:'AU', name:'Australia', flag:'🇦🇺' },
+  { code:'NZ', name:'New Zealand', flag:'🇳🇿' },
+  { code:'CA', name:'Canada', flag:'🇨🇦' },
+  { code:'SG', name:'Singapore', flag:'🇸🇬' },
+  { code:'KR', name:'South Korea', flag:'🇰🇷' },
+  { code:'IL', name:'Israel', flag:'🇮🇱' },
+  { code:'AE', name:'UAE', flag:'🇦🇪' },
+  { code:'MY', name:'Malaysia', flag:'🇲🇾' },
+  { code:'BR', name:'Brazil', flag:'🇧🇷' },
+  { code:'MX', name:'Mexico', flag:'🇲🇽' },
+  { code:'AR', name:'Argentina', flag:'🇦🇷' },
+  { code:'CL', name:'Chile', flag:'🇨🇱' },
+  { code:'CO', name:'Colombia', flag:'🇨🇴' },
+  { code:'TH', name:'Thailand', flag:'🇹🇭' },
+  { code:'PH', name:'Philippines', flag:'🇵🇭' },
+  { code:'ID', name:'Indonesia', flag:'🇮🇩' },
+  { code:'VN', name:'Vietnam', flag:'🇻🇳' },
+  { code:'IN', name:'India', flag:'🇮🇳' },
+  { code:'CN', name:'China', flag:'🇨🇳' },
+  { code:'TR', name:'Turkey', flag:'🇹🇷' },
+  { code:'ZA', name:'South Africa', flag:'🇿🇦' },
+  { code:'NG', name:'Nigeria', flag:'🇳🇬' },
+  { code:'KE', name:'Kenya', flag:'🇰🇪' },
+  { code:'EG', name:'Egypt', flag:'🇪🇬' },
+  { code:'MA', name:'Morocco', flag:'🇲🇦' },
+  { code:'GH', name:'Ghana', flag:'🇬🇭' },
+  { code:'PK', name:'Pakistan', flag:'🇵🇰' },
+  { code:'SA', name:'Saudi Arabia', flag:'🇸🇦' },
+  { code:'JM', name:'Jamaica', flag:'🇯🇲' },
+];
+
+// ── APP STATE ──
+let state = {
+  passport: null,
+  filter: 'all',
+  region: 'All',
+  search: ''
+};
+
+// ── INIT ──
+function init() {
+  const sel = document.getElementById('passportSelect');
+  PASSPORT_LIST.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.code;
+    opt.textContent = `${p.flag}  ${p.name}`;
+    sel.appendChild(opt);
+  });
+
+  sel.addEventListener('change', e => {
+    const p = PASSPORT_LIST.find(x => x.code === e.target.value);
+    document.getElementById('flagPreview').textContent = p ? p.flag : '🌐';
+    state.passport = e.target.value || null;
+    state.filter = 'all';
+    state.region = 'All';
+    state.search = '';
+    document.getElementById('searchInput').value = '';
+    document.querySelectorAll('.stat-pill').forEach(el => el.classList.remove('active'));
+    document.querySelector('.stat-pill[data-filter="all"]').classList.add('active');
+    document.querySelectorAll('.region-tab').forEach(el => el.classList.remove('active'));
+    document.querySelector('.region-tab[data-region="All"]').classList.add('active');
+    render();
+  });
+
+  document.querySelectorAll('.stat-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.stat-pill').forEach(el => el.classList.remove('active'));
+      pill.classList.add('active');
+      state.filter = pill.dataset.filter;
+      render();
+    });
+  });
+
+  document.querySelectorAll('.region-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.region-tab').forEach(el => el.classList.remove('active'));
+      tab.classList.add('active');
+      state.region = tab.dataset.region;
+      render();
+    });
+  });
+
+  document.getElementById('searchInput').addEventListener('input', e => {
+    state.search = e.target.value.toLowerCase();
+    render();
+  });
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  });
+
+  setTimeout(() => {
+    document.getElementById('loadingOverlay').classList.add('hidden');
+    setTimeout(() => document.getElementById('loadingOverlay').remove(), 400);
+  }, 600);
+}
+
+// ── RENDER ──
+const TYPE_ORDER = { VF: 0, ETA: 1, EV: 2, VOA: 3, VR: 4 };
+const TYPE_LABELS = { VF: 'Visa Free', ETA: 'eTA', EV: 'eVisa', VOA: 'Visa on Arrival', VR: 'Visa Required' };
+const TYPE_FULL = { VF: 'Visa Free', ETA: 'Electronic Travel Authorization', EV: 'Electronic Visa', VOA: 'Visa on Arrival', VR: 'Visa Required' };
+
+function render() {
+  const grid = document.getElementById('cardGrid');
+  const rc = document.getElementById('resultsCount');
+
+  if (!state.passport) {
+    grid.innerHTML = `<div class="welcome-state"><div class="welcome-icon">🗺️</div><h3>Select your passport to explore the world</h3></div>`;
+    rc.textContent = '';
+    updateStats(null);
+    return;
+  }
+
+  const passportData = PASSPORTS[state.passport];
+  if (!passportData) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><h3>Data not available</h3><p>Passport data not found.</p></div>`;
+    return;
+  }
+
+  // Build destination list
+  let destinations = Object.entries(DESTINATIONS).map(([code, dest]) => {
+    const visa = passportData[code];
+    return { code, ...dest, visa };
+  }).filter(d => d.visa !== null && d.visa !== undefined);
+
+  // Stats counts
+  const counts = { VF: 0, ETA: 0, EV: 0, VOA: 0, VR: 0 };
+  destinations.forEach(d => { if (counts[d.visa.type] !== undefined) counts[d.visa.type]++; });
+  updateStats(counts);
+
+  // Filter
+  if (state.filter !== 'all') destinations = destinations.filter(d => d.visa.type === state.filter);
+  if (state.region !== 'All') destinations = destinations.filter(d => d.region === state.region);
+  if (state.search) destinations = destinations.filter(d => d.name.toLowerCase().includes(state.search));
+
+  // Sort
+  destinations.sort((a, b) => (TYPE_ORDER[a.visa.type] || 0) - (TYPE_ORDER[b.visa.type] || 0));
+
+  if (destinations.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><h3>No destinations match</h3><p>Try a different filter or region.</p></div>`;
+    rc.textContent = '';
+    return;
+  }
+
+  rc.textContent = `${destinations.length} destination${destinations.length !== 1 ? 's' : ''}`;
+
+  grid.innerHTML = destinations.map((d, i) => {
+    const daysText = d.visa.days ? `${d.visa.days}d` : '';
+    return `<div class="dest-card card-${d.visa.type.toLowerCase()}" 
+      style="animation-delay:${Math.min(i * 0.03, 0.5)}s"
+      onclick="openModal('${d.code}')">
+      <div class="card-flag">${d.flag}</div>
+      <div class="card-country">${d.name}</div>
+      <div class="card-region">${d.region}</div>
+      <span class="card-badge badge-${d.visa.type.toLowerCase()}">${TYPE_LABELS[d.visa.type]}</span>
+      ${daysText ? `<div class="card-days">${daysText}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function updateStats(counts) {
+  const passport = state.passport ? PASSPORT_LIST.find(p => p.code === state.passport) : null;
+  const all = counts ? Object.values(counts).reduce((a, b) => a + b, 0) : '—';
+  document.getElementById('countAll').textContent = counts ? all : '—';
+  document.getElementById('countVF').textContent = counts ? counts.VF : '—';
+  document.getElementById('countETA').textContent = counts ? counts.ETA : '—';
+  document.getElementById('countEV').textContent = counts ? counts.EV : '—';
+  document.getElementById('countVOA').textContent = counts ? counts.VOA : '—';
+  document.getElementById('countVR').textContent = counts ? counts.VR : '—';
+}
+
+function openModal(destCode) {
+  if (!state.passport) return;
+  const dest = DESTINATIONS[destCode];
+  const visa = PASSPORTS[state.passport][destCode];
+  if (!visa) return;
+  const passport = PASSPORT_LIST.find(p => p.code === state.passport);
+
+  document.getElementById('modalFlag').textContent = dest.flag;
+  document.getElementById('modalCountry').textContent = dest.name;
+  document.getElementById('modalRegion').textContent = `${dest.region} · Visiting from ${passport.name}`;
+
+  const badge = document.getElementById('modalBadge');
+  badge.textContent = TYPE_LABELS[visa.type];
+  badge.className = `modal-badge badge-${visa.type.toLowerCase()}`;
+
+  document.getElementById('modalDays').textContent = visa.days ? `${visa.days} days` : (visa.type === 'VF' ? 'Unlimited / See notes' : 'Varies');
+  document.getElementById('modalFee').innerHTML = visa.fee ? visa.fee : '<span class="none">No fee</span>';
+  document.getElementById('modalType').textContent = TYPE_FULL[visa.type];
+  document.getElementById('modalProcessing').innerHTML = visa.processing ? visa.processing : '<span class="none">In person / See embassy</span>';
+
+  const notesEl = document.getElementById('modalNotes');
+  notesEl.innerHTML = visa.notes ? visa.notes : '<em>No additional notes. Verify current requirements with the official embassy.</em>';
+
+  const link = document.getElementById('modalLink');
+  const linkText = document.getElementById('modalLinkText');
+  const href = visa.link || LINKS[destCode] || '#';
+  link.href = href;
+  linkText.textContent = `Official ${dest.name} Immigration Portal`;
+  link.style.display = href === '#' ? 'none' : 'flex';
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
